@@ -7,7 +7,7 @@ ActiveAdmin.register User do
       column :is_editor
       column :is_writer
       column :department
-      default_actions # View/Edit/Delete column
+      actions # View/Edit/Delete column
     end
 
     form do |f|

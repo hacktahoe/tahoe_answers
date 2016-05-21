@@ -1,3 +1,5 @@
-Version.module_eval do
-  self.abstract_class = true
+Rails.application.config.after_initialize do
+  PaperTrail::Version.module_eval do
+    self.abstract_class = true
+  end
 end

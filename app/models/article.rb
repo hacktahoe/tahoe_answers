@@ -11,16 +11,16 @@ class Article < ActiveRecord::Base
 
   # Permalinks. :slugged option means it uses the 'slug' column for the url
   #             :history option means when you change the article title, old slugs still work
-  friendly_id :title, use: [:slugged, :history]
+  friendly_id :title, use: [:slugged, :history, :finders]
 
   belongs_to :contact
   belongs_to :category
   belongs_to :user
 
-  scope :by_access_count, order('access_count DESC')
-  scope :drafts, where(:pending_review => false).where(:published => false)
-  scope :pending_review, where(:pending_review => true)
-  scope :published, where(:published => true)
+  scope :by_access_count, -> { order('access_count DESC') }
+  scope :drafts, -> { where(:pending_review => false).where(:published => false) }
+  scope :pending_review, -> { where(:pending_review => true) }
+  scope :published, -> { where(:published => true) }
 
   has_attached_file :author_pic,
     :storage => :s3,
@@ -38,12 +38,12 @@ class Article < ActiveRecord::Base
 
   validates_presence_of :access_count
 
-  attr_accessible :title, :content_main, :content_main_extra,
-    :content_need_to_know, :preview, :contact_id, :tags, :is_published, :slugs,
-    :category_id, :updated_at, :created_at, :author_pic, :author_pic_file_name,
-    :author_pic_content_type, :author_pic_file_size, :author_pic_updated_at,
-    :author_name, :author_link, :type, :service_url, :user_id, :published,
-    :pending_review
+  # attr_accessible :title, :content_main, :content_main_extra,
+  # :content_need_to_know, :preview, :contact_id, :tags, :is_published, :slugs,
+  # :category_id, :updated_at, :created_at, :author_pic, :author_pic_file_name,
+  # :author_pic_content_type, :author_pic_file_size, :author_pic_updated_at,
+  # :author_name, :author_link, :type, :service_url, :user_id, :published,
+  # :pending_review
 
   # Tanker callbacks to update the search index
   after_save :update_tank_indexes
